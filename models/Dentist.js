@@ -1,0 +1,39 @@
+const mongoose = require('mongoose');
+
+const DentistSchema = new mongoose.Schema({
+    name:{
+        type: String,
+        required: [true, 'Please add a name'],
+        unique: true,
+        trim: true,
+        maxlength: [50, 'Name can not be more than 50 characters']
+    },
+    yearsOfexperience: {
+        type: Number,
+        required: [true,'Please provide years of experience'],
+        min: [0, 'Years of experience cannot be nagative']
+    },
+    areaOfExpertise: {
+        type: String,
+        required: [true, 'Please provide area of expertise'],
+        trim: true,
+        maxlength: [100,'Area of expertise cannot be more then 100 charecters']
+    },
+    createAt: {
+        type: Date,
+        default: Date.now
+    }
+},{
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true}
+}); 
+
+// Reverse Populate with Virtuals
+HospitalSchema.virtual('appointments',{
+    ref: 'Appointment',
+    localField: '_id',
+    foreignField: 'hospital',
+    justOne: false
+});
+
+module.exports = mongoose.model('Hospital', HospitalSchema);
